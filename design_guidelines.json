@@ -1,0 +1,63 @@
+{
+  "theme": "dark",
+  "archetype": "7 (Electric & Neon) - Retro-Futurism / Terminal Look",
+  "typography": {
+    "primary_font": "JetBrains Mono",
+    "secondary_font": "JetBrains Mono",
+    "heading_font_classes": "font-mono font-bold uppercase tracking-widest text-green-500",
+    "body_font_classes": "font-mono text-base text-green-400"
+  },
+  "colors": {
+    "background": "#050A05",
+    "foreground": "#22C55E",
+    "primary": "#22C55E",
+    "primary_hover": "#86EFAC",
+    "secondary": "#064E3B",
+    "accent": "#FACC15",
+    "error": "#EF4444",
+    "muted": "#14532D",
+    "border": "#166534"
+  },
+  "spacing_and_layout": {
+    "general_spacing": "Generous spacing. p-8 or p-12 for major containers.",
+    "grid_strategy": "Control Room Grid. Dense, strict hierarchy. Use border-collapse style. No soft margins.",
+    "alignment": "Strict optical alignment. Left-aligned for body and forms. Center-aligned for Hero terminal prompts."
+  },
+  "surfaces_and_borders": {
+    "card_style": "Flat solid black background (#050A05), 1px solid green border (#166534 or #22C55E), NO border radius (rounded-none).",
+    "glassmorphism": "FORBIDDEN. Use solid black with green borders.",
+    "shadows": "Text shadow or box shadow for glowing effects ONLY. shadow-[0_0_10px_rgba(34,197,94,0.3)] or drop-shadow."
+  },
+  "components": {
+    "button": "Solid black background, 1px green border, green text. On hover: solid green background, black text. NO border radius. Add a preceding '>' or wrap in '[ ]' for CLI feel.",
+    "input": "Transparent background, 1px bottom border (green-900), focus border green-500. Text green. No rounded corners.",
+    "card": "border border-green-500/50 bg-black text-green-500 p-6 rounded-none",
+    "navigation": "Top bar, solid black, 1px bottom green border. Logo on left, links right.",
+    "timer": "Large monospace numbers, green. Changes to yellow/red when low time. Include text glow. text-[4vw]",
+    "progress_bar": "Instead of a smooth bar, use ASCII progress like [######----] or discrete blocks."
+  },
+  "animations": {
+    "transitions": "Instant transitions or very fast (duration-75) to mimic old terminals.",
+    "special_effects": "Blinking cursor (border-r-2 animate-pulse), typewriter effect for initial welcome, subtle CSS scanline overlay."
+  },
+  "image_urls": [
+    {
+      "url": "https://images.unsplash.com/photo-1771792449304-7a0b9843f631?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxyZXRybyUyMGNvbXB1dGVyJTIwc2NyZWVuJTIwZ3JlZW4lMjBtYXRyaXglMjBjb2RlJTIwYWJzdHJhY3R8ZW58MHx8fHwxNzgzMzE5Njg3fDA&ixlib=rb-4.1.0&q=85",
+      "category": "background",
+      "description": "Green grid pattern on black background, use at very low opacity (10-20%) as a body background overlay behind the scanlines."
+    }
+  ],
+  "testing_attributes": {
+    "requirement": "All interactive elements MUST have data-testid attributes (e.g. data-testid='start-quiz-button')."
+  },
+  "instructions_to_main_agent": [
+    "Strictly adhere to the dark green-on-black terminal aesthetic.",
+    "Do NOT use 'rounded' classes. Everything must have rounded-none.",
+    "Use Shadcn components but override their styles to remove border-radius, shadows, and default colors. Force them into the green/black theme.",
+    "Add a fixed, screen-covering div with pointer-events-none for scanlines: background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; z-index: 50;",
+    "Include 'JetBrains Mono' font via Google Fonts in index.html.",
+    "In the Quiz Gameplay screen, highlight wrong answers in red (#EF4444) and correct answers in green (#22C55E).",
+    "Timer should flash red when < 5 seconds.",
+    "Incorporate ASCII decorations in the UI, e.g., '=== LEADERBOARD ===' instead of standard headings."
+  ]
+}
