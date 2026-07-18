@@ -290,7 +290,7 @@ async def verify_email(payload: VerifyEmailRequest):
             raise HTTPException(status_code=400, detail="Verification link expired")
     await db.users.update_one(
         {"_id": user["_id"]},
-        {"$set": {"email_verified": True}, "$unset": {"verify_token": "", "verify_token_expires": ""}},
+        {"$set": {"email_verified": True}},
     )
     return {"ok": True}
 
