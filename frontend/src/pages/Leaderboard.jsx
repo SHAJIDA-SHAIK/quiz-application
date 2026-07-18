@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import TerminalShell from "@/components/TerminalShell";
 import { api } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const CATEGORY_FILTERS = ["All", "Python", "DBMS", "OS", "Aptitude"];
 
 export default function Leaderboard() {
+  const { user } = useAuth();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
@@ -73,10 +75,16 @@ export default function Leaderboard() {
               <tbody>
                 {entries.map((e) => {
                   const medal = e.rank === 1 ? "text-yellow-400 text-glow-yellow" : e.rank === 2 ? "text-green-300" : e.rank === 3 ? "text-green-500" : "text-green-600";
+                  const isMe = user && e.user_id === user.id;
                   return (
-                    <tr key={`${e.rank}-${e.user_name}-${e.created_at}`} className="border-t border-green-900" data-testid={`leaderboard-row-${e.rank}`}>
+                    <tr key={`${e.rank}-${e.user_name}-${e.created_at}`}
+                        className={`border-t border-green-900 ${isMe ? "bg-green-950/60 outline outline-1 outline-green-500" : ""}`}
+                        data-testid={`leaderboard-row-${e.rank}`}>
                       <td className={`py-3 px-2 font-bold ${medal}`}>#{String(e.rank).padStart(2, "0")}</td>
-                      <td className="py-3 px-2 text-green-300">{e.user_name}</td>
+                      <td className="py-3 px-2 text-green-300">
+                        {e.user_name}
+                        {isMe && <span className="ml-2 text-yellow-400 text-xs text-glow-yellow" data-testid="you-badge">← YOU</span>}
+                      </td>
                       <td className="py-3 px-2 text-green-600 hidden md:table-cell">{e.category}</td>
                       <td className="py-3 px-2 text-green-600 hidden md:table-cell">{e.difficulty}</td>
                       <td className="py-3 px-2 text-right text-green-400">{e.accuracy}%</td>

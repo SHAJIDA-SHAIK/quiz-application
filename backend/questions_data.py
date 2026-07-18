@@ -52,6 +52,50 @@ QUESTIONS = [
     {"id": "ap-h1", "category": "Aptitude", "difficulty": "Hard", "question": "Compound interest on 1000 at 10% for 2 years is:", "options": ["200", "210", "220", "231"], "correct_index": 1},
     {"id": "ap-h2", "category": "Aptitude", "difficulty": "Hard", "question": "A can do work in 10 days, B in 15. Together:", "options": ["5 days", "6 days", "8 days", "12 days"], "correct_index": 1},
     {"id": "ap-h3", "category": "Aptitude", "difficulty": "Hard", "question": "Probability of getting a sum of 7 with two dice:", "options": ["1/6", "1/8", "1/12", "1/9"], "correct_index": 0},
+
+    # ===== PYTHON (extra 9) =====
+    {"id": "py-e5", "category": "Python", "difficulty": "Easy", "question": "Which symbol is used for exponentiation in Python?", "options": ["^", "**", "//", "exp"], "correct_index": 1},
+    {"id": "py-e6", "category": "Python", "difficulty": "Easy", "question": "What does len('hello') return?", "options": ["4", "5", "6", "Error"], "correct_index": 1},
+    {"id": "py-e7", "category": "Python", "difficulty": "Easy", "question": "Which function converts a string to an integer?", "options": ["str()", "int()", "float()", "eval()"], "correct_index": 1},
+    {"id": "py-m5", "category": "Python", "difficulty": "Medium", "question": "Which of these creates a set?", "options": ["{}", "set()", "[]", "()"], "correct_index": 1},
+    {"id": "py-m6", "category": "Python", "difficulty": "Medium", "question": "What is *args used for?", "options": ["Keyword args", "Variable positional args", "Default values", "Type hints"], "correct_index": 1},
+    {"id": "py-m7", "category": "Python", "difficulty": "Medium", "question": "Output of: bool([])", "options": ["True", "False", "None", "Error"], "correct_index": 1},
+    {"id": "py-h4", "category": "Python", "difficulty": "Hard", "question": "Which is NOT thread-safe by default in CPython due to the GIL?", "options": ["list.append", "dict.setdefault", "Compound += on int", "None of these are safe"], "correct_index": 2},
+    {"id": "py-h5", "category": "Python", "difficulty": "Hard", "question": "What does __slots__ do?", "options": ["Speeds up imports", "Restricts attributes & saves memory", "Enables slots for threading", "Creates a singleton"], "correct_index": 1},
+    {"id": "py-h6", "category": "Python", "difficulty": "Hard", "question": "Result of: (lambda x: x*x)(5)", "options": ["10", "25", "5", "Error"], "correct_index": 1},
+
+    # ===== DBMS (extra 9) =====
+    {"id": "db-e5", "category": "DBMS", "difficulty": "Easy", "question": "DDL stands for:", "options": ["Data Definition Language", "Data Design Language", "Direct Data Language", "Database Def Language"], "correct_index": 0},
+    {"id": "db-e6", "category": "DBMS", "difficulty": "Easy", "question": "Which SQL clause filters rows?", "options": ["ORDER BY", "GROUP BY", "WHERE", "HAVING"], "correct_index": 2},
+    {"id": "db-e7", "category": "DBMS", "difficulty": "Easy", "question": "Which is used to remove a table entirely?", "options": ["DELETE", "TRUNCATE", "DROP", "REMOVE"], "correct_index": 2},
+    {"id": "db-m5", "category": "DBMS", "difficulty": "Medium", "question": "HAVING is used with:", "options": ["ORDER BY", "GROUP BY", "JOIN", "UNION"], "correct_index": 1},
+    {"id": "db-m6", "category": "DBMS", "difficulty": "Medium", "question": "A view is:", "options": ["A stored table", "A virtual table from a query", "An index", "A backup"], "correct_index": 1},
+    {"id": "db-m7", "category": "DBMS", "difficulty": "Medium", "question": "A tuple in relational DB means:", "options": ["A column", "A row/record", "A table", "A constraint"], "correct_index": 1},
+    {"id": "db-h4", "category": "DBMS", "difficulty": "Hard", "question": "Isolation level that prevents phantom reads:", "options": ["Read Uncommitted", "Read Committed", "Repeatable Read", "Serializable"], "correct_index": 3},
+    {"id": "db-h5", "category": "DBMS", "difficulty": "Hard", "question": "Which is a hash-based index structure?", "options": ["B-tree", "B+-tree", "Extendible hashing", "Bitmap"], "correct_index": 2},
+    {"id": "db-h6", "category": "DBMS", "difficulty": "Hard", "question": "CAP theorem states you can pick:", "options": ["All three", "Any two", "Only one", "Consistency always"], "correct_index": 1},
+
+    # ===== OS (extra 9) =====
+    {"id": "os-e5", "category": "OS", "difficulty": "Easy", "question": "Which is a mobile OS?", "options": ["Ubuntu", "Android", "Debian", "Fedora"], "correct_index": 1},
+    {"id": "os-e6", "category": "OS", "difficulty": "Easy", "question": "RAM is:", "options": ["Non-volatile", "Volatile", "Read-only", "Optical"], "correct_index": 1},
+    {"id": "os-e7", "category": "OS", "difficulty": "Easy", "question": "Which command lists files on Linux?", "options": ["dir", "ls", "list", "show"], "correct_index": 1},
+    {"id": "os-m5", "category": "OS", "difficulty": "Medium", "question": "Thrashing refers to:", "options": ["Excessive paging with low throughput", "Fast context switch", "Cache hits", "Deadlock"], "correct_index": 0},
+    {"id": "os-m6", "category": "OS", "difficulty": "Medium", "question": "A zombie process is one that:", "options": ["Runs forever", "Has terminated but not reaped", "Is starving", "Was killed forcibly"], "correct_index": 1},
+    {"id": "os-m7", "category": "OS", "difficulty": "Medium", "question": "fork() returns to child:", "options": ["Child PID", "0", "-1", "Parent PID"], "correct_index": 1},
+    {"id": "os-h4", "category": "OS", "difficulty": "Hard", "question": "Peterson's algorithm solves:", "options": ["Deadlock", "Mutual exclusion (2 processes)", "Starvation", "Paging"], "correct_index": 1},
+    {"id": "os-h5", "category": "OS", "difficulty": "Hard", "question": "Which is TRUE about a microkernel?", "options": ["More services in kernel space", "Fewer services in kernel, more in userspace", "Faster than monolithic always", "No IPC needed"], "correct_index": 1},
+    {"id": "os-h6", "category": "OS", "difficulty": "Hard", "question": "In demand paging, a page fault causes:", "options": ["Kernel panic", "Trap to OS, load page", "Process termination", "Cache flush only"], "correct_index": 1},
+
+    # ===== APTITUDE (extra 9) =====
+    {"id": "ap-e5", "category": "Aptitude", "difficulty": "Easy", "question": "What is 25% of 80?", "options": ["15", "20", "25", "30"], "correct_index": 1},
+    {"id": "ap-e6", "category": "Aptitude", "difficulty": "Easy", "question": "The LCM of 4 and 6 is:", "options": ["10", "12", "18", "24"], "correct_index": 1},
+    {"id": "ap-e7", "category": "Aptitude", "difficulty": "Easy", "question": "If 3x = 21, then x = ?", "options": ["3", "5", "7", "9"], "correct_index": 2},
+    {"id": "ap-m5", "category": "Aptitude", "difficulty": "Medium", "question": "Ratio of 45 minutes to 2 hours:", "options": ["3:8", "1:2", "2:5", "9:16"], "correct_index": 0},
+    {"id": "ap-m6", "category": "Aptitude", "difficulty": "Medium", "question": "Simple interest on 5000 at 8% for 3 years:", "options": ["800", "1000", "1200", "1500"], "correct_index": 2},
+    {"id": "ap-m7", "category": "Aptitude", "difficulty": "Medium", "question": "Odd one out: 4, 9, 16, 20, 25", "options": ["4", "16", "20", "25"], "correct_index": 2},
+    {"id": "ap-h4", "category": "Aptitude", "difficulty": "Hard", "question": "A shopkeeper marks up 40% and gives 10% discount. Profit %?", "options": ["24%", "26%", "28%", "30%"], "correct_index": 1},
+    {"id": "ap-h5", "category": "Aptitude", "difficulty": "Hard", "question": "In how many ways can 5 people sit in a row?", "options": ["25", "60", "120", "125"], "correct_index": 2},
+    {"id": "ap-h6", "category": "Aptitude", "difficulty": "Hard", "question": "The average of first 10 natural numbers:", "options": ["5", "5.5", "6", "10"], "correct_index": 1},
 ]
 
 CATEGORIES = ["Python", "DBMS", "OS", "Aptitude"]

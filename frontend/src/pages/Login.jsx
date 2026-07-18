@@ -84,11 +84,18 @@ export default function Login() {
             {busy ? "[ CONNECTING... ]" : "[ EXECUTE LOGIN ]"}
           </button>
 
-          <div className="mt-6 text-center text-green-700 text-sm font-mono">
-            no account?{" "}
-            <Link to="/register" data-testid="go-to-register" className="text-yellow-400 hover:text-yellow-300 underline decoration-dotted">
-              register &gt;&gt;
-            </Link>
+          <div className="mt-6 text-center text-green-700 text-sm font-mono space-y-2">
+            <div>
+              <Link to="/forgot-password" data-testid="forgot-password-link" className="text-green-500 hover:text-yellow-400 underline decoration-dotted">
+                forgot password?
+              </Link>
+            </div>
+            <div>
+              no account?{" "}
+              <Link to="/register" data-testid="go-to-register" className="text-yellow-400 hover:text-yellow-300 underline decoration-dotted">
+                register &gt;&gt;
+              </Link>
+            </div>
           </div>
         </form>
       </div>

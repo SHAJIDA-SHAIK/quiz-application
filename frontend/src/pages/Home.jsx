@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TerminalShell from "@/components/TerminalShell";
 import { useAuth } from "@/context/AuthContext";
+import { api } from "@/lib/api";
 
 const MenuItem = ({ label, description, onClick, testId, accent = "green" }) => {
   const colorMap = {
@@ -26,7 +27,23 @@ const MenuItem = ({ label, description, onClick, testId, accent = "green" }) => 
 
 export default function Home() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, refresh } = useAuth();
+  const [resendLink, setResendLink] = useState(null);
+  const [resendBusy, setResendBusy] = useState(false);
+
+  const isAdmin = user?.role === "admin";
+  const isVerified = user?.email_verified;
+
+  const resendVerification = async () => {
+    setResendBusy(true);
+    try {
+      const { data } = await api.post("/auth/resend-verification");
+      if (data.dev_verify_link) setResendLink(data.dev_verify_link);
+      if (data.already_verified) refresh?.();
+    } finally {
+      setResendBusy(false);
+    }
+  };
 
   return (
     <TerminalShell>
@@ -44,6 +61,24 @@ export default function Home() {
           </p>
         </div>
 
+        {user && !isVerified && (
+          <div className="mb-8 border border-yellow-700 bg-black/60 p-4 font-mono text-sm" data-testid="verify-banner">
+            <div className="text-yellow-400 text-glow-yellow mb-2">! EMAIL UNVERIFIED</div>
+            <div className="text-green-500 mb-2">
+              Your account works fine, but verify your email to unlock certificate downloads and stay in the leaderboard.
+            </div>
+            <button onClick={resendVerification} disabled={resendBusy} data-testid="resend-verification-button"
+              className="px-3 py-1 border border-yellow-500 text-yellow-400 hover:bg-yellow-400 hover:text-black text-xs uppercase tracking-widest disabled:opacity-50">
+              {resendBusy ? "[ generating... ]" : "[ get verification link ]"}
+            </button>
+            {resendLink && (
+              <a href={resendLink} className="block mt-2 text-yellow-400 hover:text-yellow-300 break-all underline decoration-dotted text-xs" data-testid="resend-verify-link">
+                {resendLink}
+              </a>
+            )}
+          </div>
+        )}
+
         <div className="mb-4 text-green-700 text-xs font-mono uppercase tracking-widest">
           ┌─── MAIN MENU ───────────────────────────────
         </div>
@@ -51,7 +86,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-testid="main-menu">
           <MenuItem
             label="Start Quiz"
-            description="Choose category & difficulty · timed questions"
+            description="Choose category & difficulty · timed questions · negative marking"
             onClick={() => navigate("/setup")}
             testId="menu-start-quiz"
           />
@@ -68,13 +103,32 @@ export default function Home() {
             onClick={() => navigate("/stats")}
             testId="menu-stats"
           />
-          <MenuItem
-            label="Exit / Logout"
-            description="Terminate session"
-            onClick={async () => { await logout(); navigate("/login"); }}
-            testId="menu-exit"
-            accent="red"
-          />
+          {isAdmin ? (
+            <MenuItem
+              label="Admin Console"
+              description="Analytics · AI question gen · question bank"
+              onClick={() => navigate("/admin")}
+              testId="menu-admin"
+              accent="yellow"
+            />
+          ) : (
+            <MenuItem
+              label="Exit / Logout"
+              description="Terminate session"
+              onClick={async () => { await logout(); navigate("/login"); }}
+              testId="menu-exit"
+              accent="red"
+            />
+          )}
+          {isAdmin && (
+            <MenuItem
+              label="Exit / Logout"
+              description="Terminate session"
+              onClick={async () => { await logout(); navigate("/login"); }}
+              testId="menu-exit"
+              accent="red"
+            />
+          )}
         </div>
 
         <div className="mt-2 text-green-700 text-xs font-mono uppercase tracking-widest">

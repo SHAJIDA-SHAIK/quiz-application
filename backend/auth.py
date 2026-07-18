@@ -81,3 +81,10 @@ async def get_current_user(request: Request, db) -> dict:
         raise HTTPException(status_code=401, detail="Token expired")
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
+
+
+async def get_current_admin(request: Request, db) -> dict:
+    user = await get_current_user(request, db)
+    if user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user

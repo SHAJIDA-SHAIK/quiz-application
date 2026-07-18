@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TerminalShell from "@/components/TerminalShell";
+import { API } from "@/lib/api";
 
 const Stat = ({ label, value, accent = "green", testId }) => {
   const colors = {
@@ -34,14 +35,21 @@ export default function Results() {
   }
 
   const accent = result.accuracy >= 80 ? "green" : result.accuracy >= 50 ? "yellow" : "red";
+  const passed = result.passed ?? (result.accuracy >= 70);
+  const certUrl = `${API}/quiz/certificate/${result.id}`;
 
   return (
     <TerminalShell>
       <div className="fade-in max-w-4xl" data-testid="results-screen">
         <div className="text-green-700 text-xs uppercase tracking-widest mb-2 font-mono">[quiz_complete]</div>
-        <h1 className="text-3xl md:text-5xl font-bold font-mono uppercase tracking-widest text-green-500 text-glow-strong mb-8">
+        <h1 className="text-3xl md:text-5xl font-bold font-mono uppercase tracking-widest text-green-500 text-glow-strong mb-4">
           === RESULTS ===
         </h1>
+
+        <div className={`mb-8 inline-block px-6 py-2 border font-mono uppercase tracking-widest text-lg ${passed ? "border-green-500 text-green-400 text-glow" : "border-red-600 text-red-400 text-glow-red"}`} data-testid="pass-fail-banner">
+          {passed ? ">> STATUS: PASSED <<" : ">> STATUS: TRY AGAIN <<"}
+          {result.negative_marking && <span className="ml-3 text-yellow-400 text-xs">· NEG.MARKING ON</span>}
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <Stat label="Total Score" value={result.score} accent="yellow" testId="result-score" />
@@ -101,10 +109,19 @@ export default function Results() {
           >
             [ ▶ PLAY AGAIN ]
           </button>
+          <a
+            href={certUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="download-certificate-button"
+            className="px-6 py-3 border border-yellow-500 text-yellow-400 hover:bg-yellow-400 hover:text-black font-mono uppercase tracking-widest text-glow-yellow"
+          >
+            [ ⬇ CERTIFICATE.PDF ]
+          </a>
           <button
             onClick={() => navigate("/leaderboard")}
             data-testid="view-leaderboard-button"
-            className="px-6 py-3 border border-yellow-700 text-yellow-400 hover:bg-yellow-400 hover:text-black font-mono uppercase tracking-widest"
+            className="px-6 py-3 border border-green-700 text-green-500 hover:bg-green-500 hover:text-black font-mono uppercase tracking-widest"
           >
             [ LEADERBOARD ]
           </button>

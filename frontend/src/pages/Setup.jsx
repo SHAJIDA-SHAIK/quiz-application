@@ -25,6 +25,7 @@ export default function Setup() {
   const [category, setCategory] = useState("Python");
   const [difficulty, setDifficulty] = useState("Easy");
   const [numQuestions, setNumQuestions] = useState(10);
+  const [negativeMarking, setNegativeMarking] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -33,9 +34,9 @@ export default function Setup() {
     setBusy(true);
     try {
       const { data } = await api.post("/quiz/start", {
-        category, difficulty, num_questions: numQuestions,
+        category, difficulty, num_questions: numQuestions, negative_marking: negativeMarking,
       });
-      navigate("/quiz", { state: { session: data, category, difficulty } });
+      navigate("/quiz", { state: { session: data, category, difficulty, negativeMarking } });
     } catch (e) {
       setError(formatApiErrorDetail(e.response?.data?.detail) || e.message);
     } finally {
@@ -89,6 +90,25 @@ export default function Setup() {
             <span className="font-mono text-2xl text-yellow-400 text-glow-yellow w-14 text-center" data-testid="num-questions-value">
               {numQuestions}
             </span>
+          </div>
+        </section>
+
+        <section className="mb-8 terminal-frame p-6 pt-10">
+          <div className="text-green-600 text-xs uppercase tracking-widest mb-4 font-mono">&gt; negative marking</div>
+          <button
+            type="button"
+            onClick={() => setNegativeMarking((v) => !v)}
+            data-testid="negative-marking-toggle"
+            className={`px-4 py-3 border font-mono uppercase tracking-widest text-sm ${
+              negativeMarking
+                ? "bg-red-500 text-black border-red-500 text-glow"
+                : "bg-black text-green-400 border-green-800 hover:border-green-500"
+            }`}
+          >
+            {negativeMarking ? "[X]" : "[ ]"} Penalty -5 per wrong answer
+          </button>
+          <div className="text-green-700 text-xs mt-2 font-mono">
+            &gt; when enabled, incorrect answers deduct 5 points. skipped/timed-out don&apos;t penalize.
           </div>
         </section>
 

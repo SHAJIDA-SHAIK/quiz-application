@@ -10,14 +10,21 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [verifyLink, setVerifyLink] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setBusy(true);
     try {
-      await register(name, email, password);
-      navigate("/");
+      const data = await register(name, email, password);
+      if (data?.dev_verify_link) {
+        setVerifyLink(data.dev_verify_link);
+        // give the user a moment to see it before navigating
+        setTimeout(() => navigate("/"), 1200);
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError(formatApiErrorDetail(err.response?.data?.detail) || err.message);
     } finally {
@@ -80,6 +87,15 @@ export default function Register() {
           {error && (
             <div className="mb-4 text-red-400 text-sm font-mono text-glow-red" data-testid="register-error">
               ! ERROR: {error}
+            </div>
+          )}
+
+          {verifyLink && (
+            <div className="mb-4 border border-green-700 bg-black/60 p-3 text-xs font-mono" data-testid="verify-link-banner">
+              <div className="text-green-500 mb-1">&gt; ACCOUNT CREATED — verify email:</div>
+              <a href={verifyLink} className="text-yellow-400 hover:text-yellow-300 break-all underline decoration-dotted" data-testid="dev-verify-link">
+                {verifyLink}
+              </a>
             </div>
           )}
 

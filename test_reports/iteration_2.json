@@ -1,0 +1,50 @@
+{
+  "summary": "Iteration 2 full-stack testing (backend pytest + Playwright frontend). Backend 28/29 (97%), Frontend all critical flows PASS. One backend spec deviation: reused verify-email token returns 400 'Invalid verification link' instead of 200 already_verified:true because server $unset's verify_token upon success. All other spec items pass: 80 static questions, admin RBAC, admin CRUD/analytics/AI (Gemini 3 Flash), negative marking, PDF certificate + ownership, leaderboard user_id, forgot/reset password with dev links, email verification with dev link. Frontend: forgot-password link, ForgotPassword dev link, ResetPassword flow, dev-verify-link after register, /verify-email success, verify-banner hide-on-verified, resend-verify-link, admin menu/nav visibility gating, admin analytics/AI/manual q CRUD, negative-marking-toggle, NEG.MARKING ON badge on results, PDF download button, YOU badge on leaderboard — all work.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "POST /api/auth/verify-email (reuse)",
+        "issue": "Spec says using an already-used token should return 200 {ok:true, already_verified:true}. Actual: 400 {'detail':'Invalid verification link'}. Root cause: server $unset's verify_token after first successful verification (server.py line ~293), so the second lookup by token yields None. Fix option A: don't $unset the token (just set email_verified=true) and let the already_verified branch trigger on reuse. Option B: also look up the user by prior verification (e.g., encode user_id in a signed token)."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Verify email after resend",
+        "issue": "If the user clicks 'get verification link' (resend) on Home BEFORE using the original dev_verify_link shown on Register, the original register link is silently invalidated (server rotates verify_token). Visiting the original link then shows '! Invalid verification link'. Not a bug per se, but easy for a tester to hit; consider surfacing 'link superseded' UX or reusing the same token in resend-verification when still valid.",
+        "affected_selectors": ["dev-verify-link", "resend-verify-link", "verify-status"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_retroquiz_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix verify-email idempotency: on POST /api/auth/verify-email, if the user is already verified (or the token was previously used), return 200 {ok:true, already_verified:true} instead of 400. Cheapest fix: stop $unset-ing verify_token in server.py line ~293 (keep it but rely on email_verified flag branch).",
+    "(Optional) Preserve the current verify_token on resend-verification if it hasn't been used yet, to avoid silently invalidating the link shown on the Register screen."
+  ],
+  "critical_code_review_comments": [
+    "server.py verify_email(): $unset of verify_token after verification is the direct cause of the spec deviation. Either drop the $unset or add a fallback lookup by email/user_id.",
+    "server.py handles ObjectId serialization correctly for admin_questions (pops _id after inserting), and _id is not leaked. Good.",
+    "Home.jsx has a minor code smell — Logout MenuItem is rendered twice via `{isAdmin ? menu-admin : menu-exit}` followed by `{isAdmin && menu-exit}`. Works, but the branching duplication could be simplified with a single boolean check.",
+    "Setup.jsx allows num_questions up to 20; if user picks Mixed/Mixed the pool is 80, fine. Not an issue.",
+    "auth.py hash_password uses bcrypt.gensalt() (default cost 12) → bcrypt hashes start with $2b$ ✓. httpOnly cookies set with SameSite=None; Secure ✓.",
+    "server.py startup admin seed is idempotent and updates role/password/email_verified as needed ✓."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_retroquiz_backend.py (new)",
+    "/app/test_reports/pytest/pytest_results.xml (generated)"
+  ],
+  "success_rate": {"backend": "97% (28/29)", "frontend": "100% of tested critical flows"},
+  "test_credentials": "admin@quiz.sys / admin123 (auto-seeded); ephemeral test users registered per run (test_user_<uuid>@quiz.sys / player123).",
+  "seed_data_creation": "Registered several TEST_ user accounts during runs (persisted). Admin question test rows were cleaned up post-run. Consider periodic cleanup of TEST_* users.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend tests live at /app/backend/tests/test_retroquiz_backend.py — a single class-based pytest suite covering auth, quiz, admin & AI. Run with: `pytest backend/tests/test_retroquiz_backend.py -v --tb=short --junitxml=/app/test_reports/pytest/pytest_results.xml`. Only failing test is TestAuthAndAdminSeed::test_verify_email_and_reuse_is_already_verified — this reproduces the reuse bug documented above. After main agent fixes verify_email to not $unset the token (or return already_verified:true on reuse), this test should pass automatically. Frontend: all data-testids present, `menu-admin` requires a short wait (~1s) after login because AuthContext loads user via cookie asynchronously before Home re-renders.",
+  "rca_of_the_issue": "verify-email reuse bug: In server.py, verify_email() performs `$unset: {verify_token: '', verify_token_expires: ''}` after a successful verification. On a second POST with the same token, `db.users.find_one({'verify_token': payload.token})` returns None → HTTPException 400. The already_verified branch is unreachable via token lookup. Reproduction: register → POST /api/auth/verify-email {token} (200) → POST again with same token → 400. Mitigation: remove `$unset` (keep the token) OR change lookup to also match by user_id extracted from a signed token (JWT-encoded)."
+}

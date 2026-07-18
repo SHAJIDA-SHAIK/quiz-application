@@ -40,6 +40,7 @@ export const TerminalShell = ({ children }) => {
                 {navLink("/", "Menu", "nav-menu")}
                 {navLink("/leaderboard", "Leaderboard", "nav-leaderboard")}
                 {navLink("/stats", "Stats", "nav-stats")}
+                {user.role === "admin" && navLink("/admin", "Admin", "nav-admin")}
                 <span className="hidden md:inline text-green-700 mx-1">|</span>
                 <span className="hidden md:inline text-green-600 text-xs uppercase" data-testid="current-user-name">
                   user: <span className="text-green-400">{user.name}</span>

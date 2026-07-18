@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: retroquiz_mongo
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: retroquiz_backend
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URL: mongodb://mongo:27017
+      DB_NAME: retro_quiz
+      CORS_ORIGINS: "http://localhost:3000"
+      FRONTEND_URL: http://localhost:3000
+      JWT_SECRET: change_me_super_secret_random_string_64_chars_here_please
+      ADMIN_EMAIL: admin@quiz.sys
+      ADMIN_PASSWORD: admin123
+      EMERGENT_LLM_KEY: sk-emergent-3837dCeB0Cc8c3b944
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_BACKEND_URL: http://localhost:8001
+    container_name: retroquiz_frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

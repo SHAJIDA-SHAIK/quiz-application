@@ -21,6 +21,7 @@ export default function Quiz() {
   const session = location.state?.session;
   const category = location.state?.category;
   const difficulty = location.state?.difficulty;
+  const negativeMarking = location.state?.negativeMarking || false;
 
   useEffect(() => {
     if (!session) navigate("/setup", { replace: true });
@@ -55,7 +56,7 @@ export default function Quiz() {
     if (timeLeft === 0 && questions.length) {
       commitAnswer(null);
     }
-  }, [timeLeft]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [timeLeft]);
 
   const commitAnswer = (choiceIndex) => {
     if (!questions.length) return;
@@ -80,6 +81,7 @@ export default function Quiz() {
       const { data } = await api.post("/quiz/submit", {
         quiz_id: session.quiz_id,
         category, difficulty,
+        negative_marking: negativeMarking,
         answers: final,
       });
       navigate("/results", { state: { result: data, category, difficulty } });
